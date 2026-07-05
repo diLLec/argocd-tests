@@ -9,11 +9,11 @@ spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
-  - git:
-      repoURL: https://github.com/diLLec/argocd-tests.git
-      revision: HEAD
-      directories:
-      - path: apps/lab/frontend/*.yml
+    - git:
+        repoURL: https://github.com/diLLec/argocd-tests.git
+        revision: HEAD
+        directories:
+          - path: apps/lab/frontend/*
   template:
     metadata:
       name: '{{.path.basename}}'
