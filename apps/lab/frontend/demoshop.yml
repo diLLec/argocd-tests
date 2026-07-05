@@ -1,0 +1,18 @@
+app:
+  name: demoshop
+  wave: 2
+  sources:
+    # additional resources
+    - repoURL: https://github.com/diLLec/argocd-tests.git
+      targetRevision: HEAD
+      path: 'resources/lab/frontend/{{.path.basename}}'
+    # override values
+    - repoURL: https://github.com/diLLec/argocd-tests.git
+      targetRevision: HEAD
+      ref: values
+    - repoUrl: https://charts.makaira.io/makaira
+      chart: demoshop
+      targetRevision: 2.3.0
+      helm:
+        valueFiles:
+          - $values/helm_overrides/lab/frontend/{{.path.basename}}/*.yml

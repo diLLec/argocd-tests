@@ -1,0 +1,33 @@
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: demo-appset
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://github.com/diLLec/argocd-tests.git
+      revision: HEAD
+      directories:
+      - path: apps/lab/frontend/*
+  template:
+    metadata:
+      name: '{{.path.basename}}'
+      annotations: 
+          argocd.argoproj.io/sync-wave: '{{ app.wave }}'
+    spec:
+      project: "my-project"
+      sources:
+        - repoURL: https://github.com/diLLec/argocd-tests.git
+          targetRevision: HEAD
+          path: 'resources/lab/frontend/{{.path.basename}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{.path.basename}}'
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true

@@ -1,0 +1,8 @@
+---
+global:
+  defaultStorageClass: standard
+
+auth:
+  enabled: true
+  rootPassword: "rootpassword"
+  
