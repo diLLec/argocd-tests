@@ -12,8 +12,8 @@ spec:
     - git:
         repoURL: https://github.com/diLLec/argocd-tests.git
         revision: HEAD
-        directories:
-          - path: apps/lab/frontend/**/config.yml
+        files:
+          - path: "apps/lab/frontend/*/config.yml"
   template:
     metadata:
       name: '{{.path.basename}}'
@@ -31,5 +31,5 @@ spec:
     spec:
       sources:
         {{- range $source := .app.sources }}
-          - {{ $source | toYaml | nindent 10 }}
+          - {{ $source | toYaml | nindent 12 }}
         {{- end }}
