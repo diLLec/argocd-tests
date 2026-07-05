@@ -4,7 +4,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: demo-appset
-  namespace: argocd
+  namespace: default
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
@@ -13,21 +13,23 @@ spec:
       repoURL: https://github.com/diLLec/argocd-tests.git
       revision: HEAD
       directories:
-      - path: apps/lab/frontend/*
+      - path: apps/lab/frontend/*.yml
   template:
     metadata:
       name: '{{.path.basename}}'
       annotations: 
           argocd.argoproj.io/sync-wave: '{{ app.wave }}'
     spec:
-      project: "my-project"
-      sources:
-        - repoURL: https://github.com/diLLec/argocd-tests.git
-          targetRevision: HEAD
-          path: 'resources/lab/frontend/{{.path.basename}}'
+      project: "default"
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{.path.basename}}'
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
+  templatePatch: |
+    spec:
+      sources:
+        {{- range $source := .app.sources }}
+          - {{ $source | toYaml | nindent 10 }}
+        {{- end }}
