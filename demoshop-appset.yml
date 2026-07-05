@@ -13,12 +13,12 @@ spec:
         repoURL: https://github.com/diLLec/argocd-tests.git
         revision: HEAD
         directories:
-          - path: apps/lab/frontend/*
+          - path: apps/lab/frontend/**/config.yml
   template:
     metadata:
       name: '{{.path.basename}}'
       annotations: 
-          argocd.argoproj.io/sync-wave: '{{ app.wave }}'
+          argocd.argoproj.io/sync-wave: '{{.app.wave}}'
     spec:
       project: "default"
       destination:
